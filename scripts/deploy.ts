@@ -2,17 +2,30 @@ import { ethers } from "hardhat";
 
 async function main() {
   const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const unlockTime = currentTimestampInSeconds + 60;
 
-  const lockedAmount = ethers.utils.parseEther("0.001");
+  const MIN_ENTRY_FEE = ethers.utils.parseEther("0.01");
+  const MIN_CHALLENGE_DURATION = 60;
+  const MAX_CHALLENGE_DURATION = 60 * 60 * 24; // 1 day
+  const MIN_LOCK_DURATION = 60;
+  const MAX_LOCK_DURATION = 60 * 60 * 24 * 7 * 4; // 4 weeks
+  const SETTLEMENT_DURATION = 60 * 60; // 1 hour
 
-  const Lock = await ethers.getContractFactory("Lock");
-  const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
+  const ChallengeFactory = await ethers.getContractFactory("ChallengeFactory");
+  const challengeFactory = await ChallengeFactory.deploy(
+    MIN_ENTRY_FEE,
+    MIN_CHALLENGE_DURATION,
+    MAX_CHALLENGE_DURATION,
+    MIN_LOCK_DURATION,
+    MAX_LOCK_DURATION,
+    SETTLEMENT_DURATION
+  );
 
-  await lock.deployed();
+  await challengeFactory.deployed();
 
   console.log(
-    `Lock with ${ethers.utils.formatEther(lockedAmount)}ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`
+    `Challenge with entry fee ${ethers.utils.formatEther(
+      MIN_ENTRY_FEE
+    )}ETH deployed to ${challengeFactory.address}`
   );
 }
 
