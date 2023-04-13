@@ -60,6 +60,10 @@ contract ChallengeFactory is Ownable {
         //* The creator should not have an active challenge present
         require(address(activeChallenges[msg.sender]) == address(0x0), "The creator already has an active challenge");
 
+        //* The creator should pay the minimum entry fee
+        require(msg.value >= minEntryFee, "The entry fee is too low");
+
+        //* Deploy a new challenge contract
         Challenge challenge = Challenge(Clones.clone(challengeImplementation));
         challenge.initialize{value: msg.value}(
             msg.value,
@@ -69,6 +73,7 @@ contract ChallengeFactory is Ownable {
             msg.sender,
             _creatorPrediction
         );
+        //* Add the challenge to the active challenges mapping with the creator's address as the key
         activeChallenges[msg.sender] = challenge;
     }
 }
