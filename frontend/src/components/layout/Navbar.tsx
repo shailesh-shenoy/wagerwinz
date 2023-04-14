@@ -65,7 +65,7 @@ export default function Navbar() {
         </Flex>
 
         <Flex flex={{ base: 1, md: 0 }} justify={"flex-end"}>
-          <Button colorScheme={"secondary"} variant={"ghost"}>
+          <Button colorScheme={"green"} variant={"solid"}>
             Connect
           </Button>
         </Flex>
