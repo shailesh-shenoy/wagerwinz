@@ -12,7 +12,8 @@ describe("ChallengeFactory", () => {
   const SETTLEMENT_DURATION = 60 * 60; // 1 hour
 
   async function deployChallengeFactoryFixture() {
-    const [owner, account1, account2] = await ethers.getSigners();
+    const [owner, challengeCreator, challenger1, challenger2] =
+      await ethers.getSigners();
     const ChallengeFactory = await ethers.getContractFactory(
       "ChallengeFactory"
     );
@@ -27,7 +28,13 @@ describe("ChallengeFactory", () => {
 
     await challengeFactory.deployed();
 
-    return { challengeFactory, owner, account1, account2 };
+    return {
+      challengeFactory,
+      owner,
+      challengeCreator,
+      challenger1,
+      challenger2,
+    };
   }
 
   describe("Deployment", function () {
@@ -99,6 +106,48 @@ describe("ChallengeFactory", () => {
       expect(await challengeImplementation.challengerPrediction()).to.equal(0);
       expect(await challengeImplementation.settledBy()).to.equal(
         ethers.constants.AddressZero
+      );
+    });
+  });
+
+  describe("Challenge Creation", function () {
+    it("Should not allow challenge creation if entry fee sent in msg.value is too low", async function () {
+      const { challengeFactory, challengeCreator } = await loadFixture(
+        deployChallengeFactoryFixture
+      );
+
+      const entryFee = ethers.utils.parseEther("0.009");
+
+      await expect(
+        challengeFactory.connect(challengeCreator).createChallenge(12000000, {
+          value: entryFee,
+        })
+      ).to.be.revertedWith("ChallengeFactory: The entry fee sent is too low");
+    });
+
+    it("Should not allow challenge creation if the message sender/creator already has an active challenge", async function () {
+      const { challengeFactory, challengeCreator } = await loadFixture(
+        deployChallengeFactoryFixture
+      );
+
+      const entryFee = ethers.utils.parseEther("0.01");
+
+      //*Challenger's address in activeChallenges should be mapped to 0x0
+      expect(
+        await challengeFactory.activeChallenges(challengeCreator.address)
+      ).to.equal(ethers.constants.AddressZero);
+
+      //*Create a challenge by passing in the entry fee and a prediction
+      await challengeFactory
+        .connect(challengeCreator)
+        .createChallenge(12000000, { value: entryFee });
+
+      await expect(
+        challengeFactory.connect(challengeCreator).createChallenge(12000000, {
+          value: entryFee,
+        })
+      ).to.be.revertedWith(
+        "ChallengeFactory: The creator already has an active challenge"
       );
     });
   });

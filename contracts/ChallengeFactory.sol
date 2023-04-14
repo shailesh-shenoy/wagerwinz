@@ -58,10 +58,13 @@ contract ChallengeFactory is Ownable {
 
     function createChallenge(uint256 _creatorPrediction) external payable {
         //* The creator should not have an active challenge present
-        require(address(activeChallenges[msg.sender]) == address(0x0), "The creator already has an active challenge");
+        require(
+            address(activeChallenges[msg.sender]) == address(0x0),
+            "ChallengeFactory: The creator already has an active challenge"
+        );
 
         //* The creator should pay the minimum entry fee
-        require(msg.value >= minEntryFee, "The entry fee is too low");
+        require(msg.value >= minEntryFee, "ChallengeFactory: The entry fee sent is too low");
 
         //* Deploy a new challenge contract
         Challenge challenge = Challenge(Clones.clone(challengeImplementation));
