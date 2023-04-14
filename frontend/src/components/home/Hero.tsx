@@ -70,11 +70,7 @@ export default function Hero() {
         </Stack>
       </Flex>
       <Flex flex={1}>
-        <Image
-          alt={"Login Image"}
-          objectFit={"cover"}
-          src={"/hero-image.jpg"}
-        />
+        <Image alt={"Hero Image"} objectFit={"cover"} src={"/hero-image.jpg"} />
       </Flex>
     </Stack>
   );
