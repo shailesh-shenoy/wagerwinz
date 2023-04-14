@@ -12,7 +12,7 @@ import {
   Image,
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
-
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import NextLink from "next/link";
 
 import { NAV_ITEMS } from "./types";
@@ -64,10 +64,8 @@ export default function Navbar() {
           </Flex>
         </Flex>
 
-        <Flex flex={{ base: 1, md: 0 }} justify={"flex-end"}>
-          <Button colorScheme={"green"} variant={"solid"}>
-            Connect
-          </Button>
+        <Flex flex={1} justify={"flex-end"} align="center">
+          <ConnectButton />
         </Flex>
       </Flex>
 
