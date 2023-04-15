@@ -1,4 +1,5 @@
-import { ethers } from "hardhat";
+import { config, ethers } from "hardhat";
+import fs from "fs";
 
 async function main() {
   const currentTimestampInSeconds = Math.round(Date.now() / 1000);
@@ -23,9 +24,21 @@ async function main() {
   await challengeFactory.deployed();
 
   console.log(
-    `Challenge with entry fee ${ethers.utils.formatEther(
+    `ChallengeFactory with entry fee ${ethers.utils.formatEther(
       MIN_ENTRY_FEE
     )}ETH deployed to ${challengeFactory.address}`
+  );
+
+  saveFrontendFiles(challengeFactory.address, "CHALLENGE_FACTORY_ADDRESS");
+}
+
+function saveFrontendFiles(
+  challengeFactoryAddress: string,
+  challengeFactoryName: string
+) {
+  fs.writeFileSync(
+    `${config.paths.artifacts}/contracts/challengeFactoryAddress.ts`,
+    `export const ${challengeFactoryName} = '${challengeFactoryAddress}'`
   );
 }
 
