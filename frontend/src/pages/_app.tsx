@@ -74,7 +74,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
 //! Configure Wagmi and RainbowKit
 
-const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY || "";
+const ALCHEMY_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || "";
 
 const { chains, provider, webSocketProvider } = configureChains(
   [sepolia, localhost],

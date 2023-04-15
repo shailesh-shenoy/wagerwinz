@@ -11,7 +11,7 @@ const ALCHEMY_API_KEY_SEPOLIA = process.env.ALCHEMY_API_KEY_SEPOLIA;
 const config: HardhatUserConfig = {
   solidity: "0.8.18",
   paths: {
-    artifacts: "./frontend/artifacts",
+    artifacts: "./frontend/src/artifacts",
   },
   networks: {
     hardhat: {
@@ -27,7 +27,7 @@ const config: HardhatUserConfig = {
     },
   },
   typechain: {
-    outDir: "./frontend/types/typechain",
+    outDir: "./frontend/src/types/typechain",
   },
   etherscan: {
     apiKey: "VVM84R4XHFGKUZB41IMFY5JA54AJGMD5H9",

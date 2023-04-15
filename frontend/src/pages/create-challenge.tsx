@@ -17,18 +17,42 @@ import {
   Tooltip,
   InputGroup,
   InputRightAddon,
+  useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import chainlinkPriceFeed from "@chainlink/contracts/abi/v0.8/AggregatorV3Interface.json";
+import { useContractRead } from "wagmi";
+import { AggregatorV3Interface } from "@/types/typechain";
 
 export default function CreateChallenge() {
+  //* State and env variables
   const [creatorPrediction, setCreatorPrediction] = useState("");
   const [entryFee, setEntryFee] = useState("");
+  const [ethUsdPrice, setEthUsdPrice] = useState<number>();
+  const ethPriceFeedAddress =
+    process.env.NEXT_PUBLIC_CHAINLINK_ETHUSD_CONTRACT_ADDRESS || "";
 
-  const handleChallengeCreation = async (event: any) => {
-    event.preventDefault();
-    console.log("creatorPrediction", creatorPrediction);
-    console.log("entryFee", entryFee);
-  };
+  //*Toast hook from Chakra
+  const toast = useToast();
+
+  //* Wagmi hooks and configuration to set up eth price feed
+  const {
+    data: ethFeedData,
+    isError,
+    isLoading,
+    error: ethFeedError,
+  } = useContractRead({
+    // @ts-expect-error: Ignore as ethPriceFeedAddress is a proper address loaded from env
+    address: ethPriceFeedAddress,
+    abi: chainlinkPriceFeed,
+    functionName: "latestRoundData",
+    watch: true,
+    onSuccess: (data: any) => {
+      const ethPriceInUsd = data?.answer?.toNumber() / 10 ** 8;
+      setEthUsdPrice(ethPriceInUsd);
+    },
+  });
+
   return (
     <Box bg="secondary.100" p={10} minHeight="90vh">
       <SimpleGrid
@@ -93,6 +117,26 @@ export default function CreateChallenge() {
                 </InputGroup>
               </Tooltip>
             </FormControl>
+
+            <FormControl isReadOnly mt={4}>
+              <FormLabel>Current Ethereum Price</FormLabel>
+              <Tooltip
+                hasArrow
+                label="Latest price of ETH in USD from the Chainlink ETH/USD Price Feed."
+                bg="green.600"
+                color="white"
+              >
+                <InputGroup size="sm" variant="filled">
+                  <Input
+                    type="text"
+                    value={ethUsdPrice || "Loading..."}
+                    size="sm"
+                    bg="secondary.100"
+                  />
+                  <InputRightAddon bg="secondary.200">ETH</InputRightAddon>
+                </InputGroup>
+              </Tooltip>
+            </FormControl>
           </CardBody>
         </Card>
         <Card rounded="2xl">
@@ -140,4 +184,9 @@ export default function CreateChallenge() {
       </SimpleGrid>
     </Box>
   );
+  function handleChallengeCreation(event: any) {
+    event.preventDefault();
+    console.log("creatorPrediction", creatorPrediction);
+    console.log("entryFee", entryFee);
+  }
 }
