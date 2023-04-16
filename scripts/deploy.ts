@@ -1,4 +1,4 @@
-import { config, ethers } from "hardhat";
+import { config, ethers, network } from "hardhat";
 import fs from "fs";
 
 async function main() {
@@ -26,7 +26,7 @@ async function main() {
   console.log(
     `ChallengeFactory with entry fee ${ethers.utils.formatEther(
       MIN_ENTRY_FEE
-    )}ETH deployed to ${challengeFactory.address}`
+    )}ETH deployed to ${challengeFactory.address} and network ${network.name}}`
   );
 
   saveFrontendFiles(challengeFactory.address, "CHALLENGE_FACTORY_ADDRESS");
