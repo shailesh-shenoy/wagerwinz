@@ -20,6 +20,9 @@ const config: HardhatUserConfig = {
         auto: true,
         interval: 10000,
       },
+      forking: {
+        url: `https://eth-sepolia.g.alchemy.com/v2/${ALCHEMY_API_KEY_SEPOLIA}`,
+      },
     },
     sepolia: {
       url: `https://eth-sepolia.g.alchemy.com/v2/${ALCHEMY_API_KEY_SEPOLIA}`,
