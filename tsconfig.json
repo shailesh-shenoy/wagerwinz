@@ -9,6 +9,6 @@
     "resolveJsonModule": true
   },
   "exclude": ["dist", "node_modules"],
-  "include": ["./scripts"],
+  "include": ["./test", "./scripts"],
   "files": ["./hardhat.config.ts"]
 }

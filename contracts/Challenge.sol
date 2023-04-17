@@ -21,8 +21,9 @@ contract Challenge is Ownable {
     uint256 public challengerPrediction;
     address public settledBy;
 
+    event ChallengeAccepted(address indexed challengerAddress, uint256 challengerPrediction);
+
     function initialize(
-        uint256 _entryFee,
         uint256 _lockTime,
         uint256 _settlementStartTime,
         uint256 _settlementEndTime,
@@ -32,26 +33,51 @@ contract Challenge is Ownable {
         //! The contract must not have been initialized already
         require(startBlock == 0, "Contract already initialized");
 
-        //! Only the challengecontroller contract can deploy this contract
-        //TODO: Update the address to the challenge controller contract address
-        // require(msg.sender == address(0x0), "Only the challenge controller can deploy this contract");
-
-        //! Creator's entry fee has to be paid in the constructor
-        require(msg.value == _entryFee, "The entry fee must be paid to deploy the contract");
-
         //! All of the following variables are technically immutable, except for the creatorPrediction
         //* Set the variables which can be determined by EVM globals
         startBlock = block.number;
         startTime = block.timestamp;
 
         //* Set the variables which are passed in as arguments
-        entryFee = _entryFee;
+        entryFee = msg.value;
         lockTime = _lockTime;
         settlementStartTime = _settlementStartTime;
         settlementEndTime = _settlementEndTime;
         creator = _creator;
-
         creatorPrediction = _creatorPrediction;
+    }
+
+    //* Function to view all variables of the challenge
+    function getChallengeDetails()
+        external
+        view
+        returns (
+            address _owner,
+            uint256 _startBlock,
+            uint256 _startTime,
+            uint256 _entryFee,
+            uint256 _lockTime,
+            uint256 _settlementStartTime,
+            uint256 _settlementEndTime,
+            address _creator,
+            uint256 _creatorPrediction,
+            address _challenger,
+            uint256 _challengerPrediction,
+            address _settledBy
+        )
+    {
+        _owner = owner();
+        _startBlock = startBlock;
+        _startTime = startTime;
+        _entryFee = entryFee;
+        _lockTime = lockTime;
+        _settlementStartTime = settlementStartTime;
+        _settlementEndTime = settlementEndTime;
+        _creator = creator;
+        _creatorPrediction = creatorPrediction;
+        _challenger = challenger;
+        _challengerPrediction = challengerPrediction;
+        _settledBy = settledBy;
     }
 
     /*
@@ -61,6 +87,9 @@ contract Challenge is Ownable {
     function acceptChallenge(uint256 _challengerPrediction) external payable {
         //* The challenge must not have been accepted already
         require(challenger == address(0x0), "The challenge has already been accepted");
+
+        //* The challenger must accept the challenge before the lock time
+        require(block.timestamp < lockTime, "The challenger must accept the challenge before the lock time");
 
         //! The entry fee must be paid to accept the challenge
         require(msg.value == entryFee, "The entry fee must be paid to accept the challenge");
@@ -73,5 +102,7 @@ contract Challenge is Ownable {
         //* Set the challenger and the challenger's prediction
         challenger = msg.sender;
         challengerPrediction = _challengerPrediction;
+
+        emit ChallengeAccepted(msg.sender, _challengerPrediction);
     }
 }
