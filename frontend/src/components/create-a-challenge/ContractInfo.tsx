@@ -18,6 +18,7 @@ import {
   SimpleGrid,
   StackDivider,
   Tooltip,
+  useToast,
 } from "@chakra-ui/react";
 import { BigNumber, utils } from "ethers";
 import {
@@ -27,12 +28,23 @@ import {
 } from "./types";
 import { Stack } from "@chakra-ui/react";
 import { calculateSettlementIncentive, formatDate } from "@/utilities/helpers";
+import { useEffect, useState } from "react";
 
 export default function ContractInfo({
   ethPriceFeedDetails,
   challengeFactoryDetails,
   challengeDetails,
+  setChallengeDetails,
 }: ContractInfoProps) {
+  const [challengeInput, setChallengeInput] = useState<string>("");
+  useEffect(() => {
+    console.log("UE challengeDetails");
+    if (challengeDetails?.challengeAddress) {
+      setChallengeInput(challengeDetails.challengeAddress);
+    }
+  }, [challengeDetails.challengeAddress]);
+
+  const toast = useToast();
   return (
     <Card rounded="xl">
       <CardHeader>
@@ -297,6 +309,7 @@ export default function ContractInfo({
               </Tooltip>
             </FormControl>
           </SimpleGrid>
+
           <SimpleGrid spacing={4} columns={2}>
             <Heading as="h3" size="md" gridColumn="span 2" fontWeight={100}>
               Challenge Details
@@ -311,13 +324,31 @@ export default function ContractInfo({
                   colorScheme="green"
                   variant="solid"
                   size="sm"
-                  onClick={challengeDetails?.refetchChallengeDetails}
+                  onClick={() => {
+                    if (utils.isAddress(challengeInput)) {
+                      setChallengeDetails({
+                        ...challengeDetails,
+                        challengeAddress: challengeInput,
+                      });
+                    } else {
+                      toast({
+                        title: "Invalid Challenge Address",
+                        description: "Please enter a valid challenge address.",
+                        status: "error",
+                        duration: 5000,
+                        isClosable: true,
+                      });
+                      setChallengeInput(
+                        challengeDetails?.challengeAddress ?? ""
+                      );
+                    }
+                  }}
                   aria-label="Refresh ETH/USD Price Data"
                   icon={<RepeatIcon />}
                 />
               </Tooltip>
             </Heading>
-            <FormControl isReadOnly gridColumn={{ base: "span 2" }}>
+            <FormControl gridColumn={{ base: "span 2" }}>
               <FormLabel size="sm">Challenge Address</FormLabel>
               <Tooltip
                 hasArrow
@@ -331,7 +362,10 @@ export default function ContractInfo({
                   variant="filled"
                   type="text"
                   bg="secondary.100"
-                  value={challengeDetails?.challengeAddress ?? "Loading..."}
+                  value={challengeInput ?? "Loading..."}
+                  onChange={(event) =>
+                    setChallengeInput(event.target.value.trim())
+                  }
                   size="sm"
                 />
               </Tooltip>
@@ -701,4 +735,5 @@ type ContractInfoProps = {
   ethPriceFeedDetails: EthPriceFeedDetails;
   challengeFactoryDetails: ChallengeFactoryDetails;
   challengeDetails: ChallengeDetails;
+  setChallengeDetails: (challengeDetails: ChallengeDetails) => void;
 };

@@ -159,6 +159,7 @@ export default function CreateChallenge() {
           ethPriceFeedDetails={ethPriceFeedDetails}
           challengeFactoryDetails={challengeFactoryDetails}
           challengeDetails={challengeDetails}
+          setChallengeDetails={setChallengeDetails}
         />
         <ChallengeCreator
           challengeFactoryDetails={challengeFactoryDetails}
