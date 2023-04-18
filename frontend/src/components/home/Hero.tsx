@@ -1,3 +1,4 @@
+import NextLink from "next/link";
 import {
   Button,
   Flex,
@@ -19,17 +20,21 @@ export default function Hero() {
     >
       <Flex p={8} flex={1} align={"center"} justify={"center"}>
         <Stack spacing={6} w={"full"} maxW={"lg"}>
-          <Heading fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}>
+          <Heading
+            fontSize={"6xl"}
+            textAlign={{ base: "center", md: "inherit" }}
+          >
             <Text
               as={"span"}
               position={"relative"}
+              fontWeight={700}
               zIndex={1}
               _after={{
                 content: "''",
                 width: "full",
-                height: useBreakpointValue({ base: "20%", md: "30%" }),
+                height: useBreakpointValue({ base: "20%" }),
                 position: "absolute",
-                bottom: 1,
+                bottom: 6,
                 left: 0,
                 bg: "primary.400",
                 zIndex: -1,
@@ -38,7 +43,7 @@ export default function Hero() {
               Create Wagers.
             </Text>
             <br />
-            <Text color={"primary.400"} as={"span"}>
+            <Text color={"primary.400"} fontWeight={400} as={"span"}>
               Challenge. Win!
             </Text>
           </Heading>
@@ -49,6 +54,8 @@ export default function Hero() {
           </Text>
           <Stack direction={{ base: "column", md: "row" }} spacing={4}>
             <Button
+              as={NextLink}
+              href="/create-challenge"
               rounded={"full"}
               bg={"gray.800"}
               color={"white"}
@@ -59,6 +66,8 @@ export default function Hero() {
               Get Started
             </Button>
             <Button
+              as={NextLink}
+              href="/how-it-works"
               rounded={"full"}
               variant="outline"
               colorScheme="gray.900"

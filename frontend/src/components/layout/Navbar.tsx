@@ -27,11 +27,11 @@ export default function Navbar() {
       w="100%"
       zIndex={10}
       bg="whiteAlpha.800"
+      color={"primary.900"}
       backdropFilter="saturate(180%) blur(10px)"
     >
       <Flex
         as="nav"
-        color="gray.900"
         minH={"60px"}
         py={{ base: 2 }}
         px={{ base: 4 }}
