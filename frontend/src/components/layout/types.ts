@@ -5,15 +5,15 @@ interface NavItem {
 
 export const NAV_ITEMS: Array<NavItem> = [
   {
-    label: "Create a challenge",
+    label: "CREATE",
     link: "/create-challenge",
   },
   {
-    label: "Browse",
-    link: "/browse-challenges",
+    label: "VIEW",
+    link: "/view-challenge",
   },
   {
-    label: "How it works",
+    label: "HOW IT WORKS",
     link: "/how-it-works",
   },
 ];

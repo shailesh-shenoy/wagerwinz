@@ -36,7 +36,7 @@ export default function ContractInfo({
   return (
     <Card rounded="xl">
       <CardHeader>
-        <Heading as="h2" size="md" textAlign="center">
+        <Heading as="h2" size="lg" textAlign="center" fontWeight={400}>
           CONTRACT INFO
         </Heading>
       </CardHeader>
@@ -44,7 +44,7 @@ export default function ContractInfo({
       <CardBody>
         <Stack direction="column" spacing={4} divider={<StackDivider />}>
           <SimpleGrid spacing={4} columns={2}>
-            <Heading as="h3" size="sm" gridColumn="span 2">
+            <Heading as="h3" size="md" gridColumn="span 2" fontWeight={100}>
               Ethereum Price Feed
               <Tooltip
                 hasArrow
@@ -65,7 +65,7 @@ export default function ContractInfo({
             </Heading>
             <FormControl
               isReadOnly
-              gridColumn={{ base: "span 2", md: "span 2", lg: "span 1" }}
+              gridColumn={{ base: "span 2", lg: "span 1" }}
             >
               <FormLabel>Current Ethereum Price</FormLabel>
               <Tooltip
@@ -89,7 +89,10 @@ export default function ContractInfo({
                 </InputGroup>
               </Tooltip>
             </FormControl>
-            <FormControl isReadOnly gridColumn={{ md: "span 2", lg: "span 1" }}>
+            <FormControl
+              isReadOnly
+              gridColumn={{ base: "span 2", lg: "span 1" }}
+            >
               <FormLabel>Last Updated At</FormLabel>
               <Tooltip
                 hasArrow
@@ -116,7 +119,7 @@ export default function ContractInfo({
             </FormControl>
           </SimpleGrid>
           <SimpleGrid spacing={4} columns={2}>
-            <Heading as="h3" size="sm" gridColumn="span 2">
+            <Heading as="h3" size="md" gridColumn="span 2" fontWeight={100}>
               Challenge Factory
               <Tooltip
                 hasArrow
@@ -175,7 +178,10 @@ export default function ContractInfo({
               </FormHelperText>
             </FormControl>
 
-            <FormControl isReadOnly gridColumn={{ md: "span 2", lg: "span 1" }}>
+            <FormControl
+              isReadOnly
+              gridColumn={{ base: "span 2", lg: "span 1" }}
+            >
               <FormLabel>Challenge Duration</FormLabel>
               <Tooltip
                 hasArrow
@@ -203,7 +209,10 @@ export default function ContractInfo({
                 </InputGroup>
               </Tooltip>
             </FormControl>
-            <FormControl isReadOnly gridColumn={{ md: "span 2", lg: "span 1" }}>
+            <FormControl
+              isReadOnly
+              gridColumn={{ base: "span 2", lg: "span 1" }}
+            >
               <FormLabel>Lock Duration</FormLabel>
               <Tooltip
                 hasArrow
@@ -232,7 +241,10 @@ export default function ContractInfo({
               </Tooltip>
             </FormControl>
 
-            <FormControl isReadOnly gridColumn={{ md: "span 2", lg: "span 1" }}>
+            <FormControl
+              isReadOnly
+              gridColumn={{ base: "span 2", lg: "span 1" }}
+            >
               <FormLabel>Settlement Duration</FormLabel>
               <Tooltip
                 hasArrow
@@ -257,7 +269,10 @@ export default function ContractInfo({
               </Tooltip>
             </FormControl>
 
-            <FormControl isReadOnly gridColumn={{ md: "span 2", lg: "span 1" }}>
+            <FormControl
+              isReadOnly
+              gridColumn={{ base: "span 2", lg: "span 1" }}
+            >
               <FormLabel>Minimum Entry Fee</FormLabel>
               <Tooltip
                 hasArrow
@@ -283,7 +298,7 @@ export default function ContractInfo({
             </FormControl>
           </SimpleGrid>
           <SimpleGrid spacing={4} columns={2}>
-            <Heading as="h3" size="sm" gridColumn="span 2">
+            <Heading as="h3" size="md" gridColumn="span 2" fontWeight={100}>
               Challenge Details
               <Tooltip
                 hasArrow
@@ -335,7 +350,10 @@ export default function ContractInfo({
                 </Link>
               </FormHelperText>
             </FormControl>
-            <FormControl isReadOnly gridColumn={{ md: "span 2", lg: "span 1" }}>
+            <FormControl
+              isReadOnly
+              gridColumn={{ base: "span 2", lg: "span 1" }}
+            >
               <FormLabel>Transaction Hash</FormLabel>
               <Tooltip
                 hasArrow
@@ -354,7 +372,10 @@ export default function ContractInfo({
               </Tooltip>
             </FormControl>
 
-            <FormControl isReadOnly gridColumn={{ md: "span 2", lg: "span 1" }}>
+            <FormControl
+              isReadOnly
+              gridColumn={{ base: "span 2", lg: "span 1" }}
+            >
               <FormLabel>Entry Fee</FormLabel>
               <Tooltip
                 hasArrow
@@ -380,7 +401,10 @@ export default function ContractInfo({
               </Tooltip>
             </FormControl>
 
-            <FormControl isReadOnly gridColumn={{ md: "span 2", lg: "span 1" }}>
+            <FormControl
+              isReadOnly
+              gridColumn={{ base: "span 2", lg: "span 1" }}
+            >
               <FormLabel>{`Challenge start time`}</FormLabel>
               <Tooltip
                 hasArrow
@@ -406,7 +430,10 @@ export default function ContractInfo({
               </Tooltip>
             </FormControl>
 
-            <FormControl isReadOnly gridColumn={{ md: "span 2", lg: "span 1" }}>
+            <FormControl
+              isReadOnly
+              gridColumn={{ base: "span 2", lg: "span 1" }}
+            >
               <FormLabel>{`Challenge lock time`}</FormLabel>
               <Tooltip
                 hasArrow
@@ -479,7 +506,10 @@ export default function ContractInfo({
               </FormHelperText>
             </FormControl>
 
-            <FormControl isReadOnly gridColumn={{ md: "span 2", lg: "span 1" }}>
+            <FormControl
+              isReadOnly
+              gridColumn={{ base: "span 2", lg: "span 1" }}
+            >
               <FormLabel>Creator address</FormLabel>
               <Tooltip
                 hasArrow
@@ -496,7 +526,10 @@ export default function ContractInfo({
                 />
               </Tooltip>
             </FormControl>
-            <FormControl isReadOnly gridColumn={{ md: "span 2", lg: "span 1" }}>
+            <FormControl
+              isReadOnly
+              gridColumn={{ base: "span 2", lg: "span 1" }}
+            >
               <FormLabel>{`Creator's Prediction`}</FormLabel>
               <Tooltip
                 hasArrow
@@ -525,7 +558,10 @@ export default function ContractInfo({
                 </InputGroup>
               </Tooltip>
             </FormControl>
-            <FormControl isReadOnly gridColumn={{ md: "span 2", lg: "span 1" }}>
+            <FormControl
+              isReadOnly
+              gridColumn={{ base: "span 2", lg: "span 1" }}
+            >
               <FormLabel>Challenger address</FormLabel>
               <Tooltip
                 hasArrow
@@ -542,7 +578,10 @@ export default function ContractInfo({
                 />
               </Tooltip>
             </FormControl>
-            <FormControl isReadOnly gridColumn={{ md: "span 2", lg: "span 1" }}>
+            <FormControl
+              isReadOnly
+              gridColumn={{ base: "span 2", lg: "span 1" }}
+            >
               <FormLabel>{`Challenger's Prediction`}</FormLabel>
               <Tooltip
                 hasArrow
@@ -571,7 +610,10 @@ export default function ContractInfo({
                 </InputGroup>
               </Tooltip>
             </FormControl>
-            <FormControl isReadOnly gridColumn={{ md: "span 2", lg: "span 1" }}>
+            <FormControl
+              isReadOnly
+              gridColumn={{ base: "span 2", lg: "span 1" }}
+            >
               <FormLabel>Is challenge settled?</FormLabel>
               <Tooltip
                 hasArrow
@@ -588,7 +630,10 @@ export default function ContractInfo({
                 />
               </Tooltip>
             </FormControl>
-            <FormControl isReadOnly gridColumn={{ md: "span 2", lg: "span 1" }}>
+            <FormControl
+              isReadOnly
+              gridColumn={{ base: "span 2", lg: "span 1" }}
+            >
               <FormLabel>Settled by</FormLabel>
               <Tooltip
                 hasArrow
@@ -605,7 +650,10 @@ export default function ContractInfo({
                 />
               </Tooltip>
             </FormControl>
-            <FormControl isReadOnly gridColumn={{ md: "span 2", lg: "span 1" }}>
+            <FormControl
+              isReadOnly
+              gridColumn={{ base: "span 2", lg: "span 1" }}
+            >
               <FormLabel>Is challenge active</FormLabel>
               <Tooltip
                 hasArrow
@@ -622,7 +670,10 @@ export default function ContractInfo({
                 />
               </Tooltip>
             </FormControl>
-            <FormControl isReadOnly gridColumn={{ md: "span 2", lg: "span 1" }}>
+            <FormControl
+              isReadOnly
+              gridColumn={{ base: "span 2", lg: "span 1" }}
+            >
               <FormLabel>Winner address</FormLabel>
               <Tooltip
                 hasArrow

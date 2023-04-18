@@ -13,6 +13,8 @@
     "@chakra-ui/react": "^2.5.5",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
+    "@fontsource/arvo": "^4.5.7",
+    "@fontsource/bayon": "^4.5.8",
     "@rainbow-me/rainbowkit": "^0.12.8",
     "@types/node": "18.15.11",
     "@types/react": "18.0.35",

@@ -1,6 +1,10 @@
 import { extendTheme } from "@chakra-ui/react";
 
 export const customTheme = extendTheme({
+  fonts: {
+    heading: `'Bayon', sans-serif`,
+    body: `'Arvo', serif`,
+  },
   colors: {
     transparent: "transparent",
     black: "#000",

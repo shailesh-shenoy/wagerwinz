@@ -4,6 +4,9 @@ import Head from "next/head";
 import Layout from "./_layout";
 
 import "@/styles/globals.css";
+import "@fontsource/arvo/400.css";
+import "@fontsource/bayon/400.css";
+
 import { customTheme } from "../utilities/theme";
 import { WagmiConfig, configureChains, createClient } from "wagmi";
 import { sepolia, localhost } from "wagmi/chains";

@@ -189,7 +189,7 @@ export default function ChallengeCreator({
   return (
     <Card rounded="2xl">
       <CardHeader>
-        <Heading as="h1" size="md" textAlign="center">
+        <Heading as="h1" size="lg" textAlign="center" fontWeight={400}>
           CREATE A CHALLENGE
         </Heading>
       </CardHeader>

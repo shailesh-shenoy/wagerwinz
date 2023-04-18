@@ -54,18 +54,28 @@ export default function Navbar() {
             aria-label={"Toggle Navigation"}
           />
         </Flex>
-        <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
+        {/* <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}> */}
+        <Flex flex={{ base: 0, md: 2 }} display={{ base: "none", md: "flex" }}>
           <Link as={NextLink} href="/">
             <Image src="/logo.png" alt="WagerWinz" h="48px" w="auto" />
           </Link>
 
-          <Flex display={{ base: "none", md: "flex" }} ml={20}>
+          <Flex
+            display={{ base: "none", md: "flex" }}
+            flex={{ base: 0, md: 2 }}
+            ml={12}
+          >
             <DesktopNav />
           </Flex>
         </Flex>
 
-        <Flex flex={1} justify={"flex-end"} align="center">
-          <ConnectButton />
+        <Flex flex={{ base: 2, md: 1 }} justify={"flex-end"} align="center">
+          <ConnectButton
+            label="Connect"
+            accountStatus={{ smallScreen: "address", largeScreen: "full" }}
+            showBalance={true}
+            chainStatus={"none"}
+          />
         </Flex>
       </Flex>
 
@@ -78,7 +88,7 @@ export default function Navbar() {
 
 const DesktopNav = () => {
   return (
-    <Stack as={List} direction={"row"} spacing={12} align="center">
+    <Stack as={List} direction={"row"} spacing={10} align="center">
       {NAV_ITEMS.map((navItem) => (
         <ListItem key={navItem.label}>
           <Link as={NextLink} href={navItem.link}>
