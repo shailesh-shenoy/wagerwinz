@@ -21,13 +21,7 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import challengeFactory from "@/artifacts/contracts/ChallengeFactory.sol/ChallengeFactory.json";
-import {
-  usePrepareContractWrite,
-  useContractWrite,
-  useWaitForTransaction,
-  useContractRead,
-  useAccount,
-} from "wagmi";
+import { useContractWrite, useWaitForTransaction, useAccount } from "wagmi";
 import { BigNumber, utils } from "ethers";
 import { RepeatIcon } from "@chakra-ui/icons";
 import { useChallengeFactoryChallengeCreatedEvent } from "../../generated";
@@ -36,11 +30,13 @@ import {
   useChallengeFactoryCreateChallenge,
   usePrepareChallengeFactoryCreateChallenge,
 } from "@/generated";
-import { ChallengeFactoryDetails } from "./types";
+import { ChallengeFactoryDetails, ChallengeDetails } from "./types";
 import { formatDateFromTimestampInSeconds } from "@/utilities/helpers";
 
 export default function ChallengeCreator({
   challengeFactoryDetails,
+  challengeDetails,
+  setChallengeDetails,
 }: ChallengeCreatorProps) {
   //* Form state
   const [validChallenge, setValidChallenge] = useState<boolean>(false);
@@ -49,8 +45,6 @@ export default function ChallengeCreator({
   const [entryFee, setEntryFee] = useState("0");
   const [lockTime, setLockTime] = useState<any>();
   const [settlementTime, setSettlementTime] = useState<any>();
-
-  const [challengeAddress, setChallengeAddress] = useState<string>("");
 
   const toast = useToast();
   useEffect(() => {
@@ -120,7 +114,6 @@ export default function ChallengeCreator({
     onSuccess: (data) => {
       toast({
         title: "Challenge creation request sent",
-        description: `Transaction hash: ${data?.hash}`,
         status: "success",
         duration: 5000,
         isClosable: true,
@@ -141,7 +134,10 @@ export default function ChallengeCreator({
       _creatorPrediction
     ) {
       if (_creatorAddress === creatorAddress) {
-        setChallengeAddress(_challengeAddress);
+        setChallengeDetails({
+          ...challengeDetails,
+          challengeAddress: _challengeAddress,
+        });
         console.log("Creator address: ", _creatorAddress);
         console.log("Challenge address: ", _challengeAddress);
         console.log("Lock time: ", _lockTime);
@@ -161,16 +157,19 @@ export default function ChallengeCreator({
   });
 
   // Check TX for Challenge Creation
-  const {
-    isSuccess: txSuccess,
-    error: txError,
-    isLoading: isTxLoading,
-  } = useWaitForTransaction({
+  const { isLoading: isTxLoading } = useWaitForTransaction({
     confirmations: 1,
     hash: challengeCreateData?.hash,
     onSuccess: (data) => {
+      if (data?.transactionHash) {
+        setChallengeDetails({
+          ...challengeDetails,
+          txHash: data?.transactionHash,
+        });
+      }
       toast({
-        title: "Challenge created successfully",
+        title: "Challenge creation transaction confirmed",
+        description: `Transaction hash: ${data?.transactionHash}`,
         status: "success",
         duration: 5000,
         isClosable: true,
@@ -344,4 +343,6 @@ export default function ChallengeCreator({
 
 export type ChallengeCreatorProps = {
   challengeFactoryDetails: ChallengeFactoryDetails;
+  challengeDetails: ChallengeDetails;
+  setChallengeDetails: (challengeDetails: ChallengeDetails) => void;
 };

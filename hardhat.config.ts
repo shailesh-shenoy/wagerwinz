@@ -9,7 +9,16 @@ const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
 const ALCHEMY_API_KEY_SEPOLIA = process.env.ALCHEMY_API_KEY_SEPOLIA;
 
 const config: HardhatUserConfig = {
-  solidity: "0.8.18",
+  solidity: {
+    version: "0.8.18",
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 200,
+      },
+      viaIR: true,
+    },
+  },
   paths: {
     artifacts: "./frontend/src/artifacts",
   },

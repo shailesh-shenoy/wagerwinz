@@ -6,7 +6,18 @@ import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
 contract Challenge is Ownable {
     /*
-    *Immutable variables which are set at the time of deployment
+    * Constants which are encoded in ABI and are same for all challenge contract instances
+    
+    * The settlement fee is 2% of the TVL in the challenge contract OR 0.2 ETH, whichever is lower
+    */
+    uint8 public constant SETTLEMENT_FEE_PERCENT = 2;
+    uint64 public constant SETTLEMENT_FEE_MAX = 0.2 ether;
+
+    //* The address of the chainlink price feed for ETH/USD
+    AggregatorV3Interface public immutable ethPriceFeed;
+
+    /*
+    *Immutable(Techincally) variables which are set at the time of deployment
     *These variables govern the rules and state of the challenge
     */
     uint256 public startBlock;
@@ -16,12 +27,21 @@ contract Challenge is Ownable {
     uint256 public settlementStartTime;
     uint256 public settlementEndTime;
     address public creator;
+
+    //* These variables may change over the lifetime of the contract
     uint256 public creatorPrediction;
     address public challenger;
     uint256 public challengerPrediction;
+    bool public settled;
     address public settledBy;
+    bool public active;
+    address public winner;
 
     event ChallengeAccepted(address indexed challengerAddress, uint256 challengerPrediction);
+
+    constructor(address _ethPriceFeedAddress) {
+        ethPriceFeed = AggregatorV3Interface(_ethPriceFeedAddress);
+    }
 
     function initialize(
         uint256 _lockTime,
@@ -45,9 +65,11 @@ contract Challenge is Ownable {
         settlementEndTime = _settlementEndTime;
         creator = _creator;
         creatorPrediction = _creatorPrediction;
+
+        //* Set the contract as active
+        active = true;
     }
 
-    //* Function to view all variables of the challenge
     function getChallengeDetails()
         external
         view
@@ -63,7 +85,12 @@ contract Challenge is Ownable {
             uint256 _creatorPrediction,
             address _challenger,
             uint256 _challengerPrediction,
-            address _settledBy
+            bool _settled,
+            address _settledBy,
+            bool _active,
+            address _winner,
+            uint8 _SETTLEMENT_FEE_PERCENT,
+            uint64 _SETTLEMENT_FEE_MAX
         )
     {
         _owner = owner();
@@ -77,7 +104,12 @@ contract Challenge is Ownable {
         _creatorPrediction = creatorPrediction;
         _challenger = challenger;
         _challengerPrediction = challengerPrediction;
+        _settled = settled;
         _settledBy = settledBy;
+        _active = active;
+        _winner = winner;
+        _SETTLEMENT_FEE_PERCENT = SETTLEMENT_FEE_PERCENT;
+        _SETTLEMENT_FEE_MAX = SETTLEMENT_FEE_MAX;
     }
 
     /*
@@ -89,7 +121,7 @@ contract Challenge is Ownable {
         require(challenger == address(0x0), "The challenge has already been accepted");
 
         //* The challenger must accept the challenge before the lock time
-        require(block.timestamp < lockTime, "The challenger must accept the challenge before the lock time");
+        require(block.timestamp <= lockTime, "The challenger must accept the challenge before the lock time");
 
         //! The entry fee must be paid to accept the challenge
         require(msg.value == entryFee, "The entry fee must be paid to accept the challenge");

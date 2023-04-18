@@ -13,6 +13,9 @@ describe("ChallengeFactory", () => {
   const MOCK_CREATOR_PREDICTION = 1999.87913381 * 10 ** 8; //Random value for testing
   const MOCK_CHALLENGER_PREDICTION = 2000.87913381 * 10 ** 8; //Random value for testing
   const MOCK_ENTRY_FEE = ethers.utils.parseEther("0.02");
+  //SEPOLIA ADDRESS
+  const CHAINLINK_ETHUSD_CONTRACT_ADDRESS =
+    "0x694aa1769357215de4fac081bf1f309adc325306";
 
   async function deployChallengeFactoryFixture() {
     const [owner, challengeCreator, challenger1, challenger2] =
@@ -26,7 +29,8 @@ describe("ChallengeFactory", () => {
       MAX_CHALLENGE_DURATION,
       MIN_LOCK_DURATION,
       MAX_LOCK_DURATION,
-      SETTLEMENT_DURATION
+      SETTLEMENT_DURATION,
+      CHAINLINK_ETHUSD_CONTRACT_ADDRESS
     )) as ChallengeFactory;
 
     await challengeFactory.deployed();

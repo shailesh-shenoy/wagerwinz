@@ -11,6 +11,10 @@ async function main() {
   const MAX_LOCK_DURATION = 60 * 60 * 24 * 7 * 4; // 4 weeks
   const SETTLEMENT_DURATION = 60 * 60; // 1 hour
 
+  //SEPOLIA ADDRESS
+  const CHAINLINK_ETHUSD_CONTRACT_ADDRESS =
+    "0x694aa1769357215de4fac081bf1f309adc325306";
+
   const ChallengeFactory = await ethers.getContractFactory("ChallengeFactory");
   const challengeFactory = await ChallengeFactory.deploy(
     MIN_ENTRY_FEE,
@@ -18,7 +22,8 @@ async function main() {
     MAX_CHALLENGE_DURATION,
     MIN_LOCK_DURATION,
     MAX_LOCK_DURATION,
-    SETTLEMENT_DURATION
+    SETTLEMENT_DURATION,
+    CHAINLINK_ETHUSD_CONTRACT_ADDRESS
   );
 
   await challengeFactory.deployed();

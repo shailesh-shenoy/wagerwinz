@@ -15,6 +15,7 @@ contract ChallengeFactory is Ownable {
     uint256 public immutable maxLockDuration;
     uint256 public immutable settlementDuration;
     address public immutable challengeImplementation;
+    address public immutable ethPriceFeedAddress;
 
     event ChallengeCreated(
         address indexed creatorAddress,
@@ -32,7 +33,8 @@ contract ChallengeFactory is Ownable {
         uint256 _maxChallengeDuration,
         uint256 _minLockDuration,
         uint256 _maxLockDuration,
-        uint256 _settlementDuration
+        uint256 _settlementDuration,
+        address _ethPriceFeedAddress
     ) {
         //* All time values are in seconds
         //* All currency values are in wei
@@ -61,8 +63,11 @@ contract ChallengeFactory is Ownable {
         //* Duration of the settlement period, to ensure that the time for settlement is not too short
         settlementDuration = _settlementDuration;
 
+        //* Address of the chainlink price feed for ETH/USD
+        ethPriceFeedAddress = _ethPriceFeedAddress;
+
         //! Create an implementation address for the challenge contract, to be used for cloning
-        challengeImplementation = address(new Challenge());
+        challengeImplementation = address(new Challenge(_ethPriceFeedAddress));
     }
 
     //* Function to get all public variables of the factory contract
