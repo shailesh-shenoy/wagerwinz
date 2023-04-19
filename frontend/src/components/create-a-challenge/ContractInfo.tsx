@@ -16,7 +16,6 @@ import {
   SimpleGrid,
   StackDivider,
   Tooltip,
-  useToast,
 } from "@chakra-ui/react";
 import { utils } from "ethers";
 import { ChallengeFactoryDetails } from "./types";
@@ -32,7 +31,6 @@ export default function ContractInfo({
   challengeDetails,
   setChallengeDetails,
 }: ContractInfoProps) {
-  const toast = useToast();
   return (
     <Card rounded="xl">
       <CardHeader>

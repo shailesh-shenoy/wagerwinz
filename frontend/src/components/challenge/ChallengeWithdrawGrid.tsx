@@ -81,8 +81,8 @@ export default function ChallengeWithdrawGrid({
     onSuccess: () => {
       toast({
         title: "Withdraw transaction sent successfully",
-        status: "success",
-        duration: 2000,
+        status: "info",
+        duration: 1000,
         isClosable: true,
       });
     },
@@ -96,8 +96,8 @@ export default function ChallengeWithdrawGrid({
       toast({
         title: "Withdraw transaction confirmed",
         description: `Challenge withdraw confirmed with transaction hash ${data.transactionHash}`,
-        status: "success",
-        duration: 2000,
+        status: "info",
+        duration: 1000,
         isClosable: true,
       });
     },

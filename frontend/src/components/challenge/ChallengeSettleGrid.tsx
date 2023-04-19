@@ -89,8 +89,8 @@ export default function ChallengeSettleGrid({
     onSuccess: () => {
       toast({
         title: "Challenge settle transaction sent",
-        status: "success",
-        duration: 2000,
+        status: "info",
+        duration: 1000,
         isClosable: true,
       });
     },
@@ -104,8 +104,8 @@ export default function ChallengeSettleGrid({
       toast({
         title: "Challenge settle transaction confirmed",
         description: `Challenge settle confirmed with transaction hash ${data.transactionHash}`,
-        status: "success",
-        duration: 2000,
+        status: "info",
+        duration: 1000,
         isClosable: true,
       });
     },
@@ -136,6 +136,9 @@ export default function ChallengeSettleGrid({
         )}, earning a settlement fee of ${utils.formatEther(
           _settlementFee
         )} ETH. The challenge was won by ${_winner}.`,
+        status: "success",
+        duration: 5000,
+        isClosable: true,
       });
     },
   });
@@ -193,8 +196,8 @@ export default function ChallengeSettleGrid({
     onSuccess: () => {
       toast({
         title: "Challenge Cancel transaction sent",
-        status: "success",
-        duration: 2000,
+        status: "info",
+        duration: 1000,
         isClosable: true,
       });
     },
@@ -208,8 +211,8 @@ export default function ChallengeSettleGrid({
       toast({
         title: "Challenge Cancel transaction confirmed",
         description: `Challenge Cancel confirmed with transaction hash ${data.transactionHash}`,
-        status: "success",
-        duration: 2000,
+        status: "info",
+        duration: 1000,
         isClosable: true,
       });
     },
@@ -238,6 +241,9 @@ export default function ChallengeSettleGrid({
         description: `Challenge cancelled by ${_cancelledBy} at ${formatDateFromTimestampInSeconds(
           _cancelledAt?.toNumber()
         )}.`,
+        status: "success",
+        duration: 2000,
+        isClosable: true,
       });
     },
   });

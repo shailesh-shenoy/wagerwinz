@@ -61,7 +61,7 @@ export default function ChallengeDetailsGrid({
                 toast({
                   title: "Invalid Challenge Address",
                   description: "Please enter a valid challenge address.",
-                  status: "error",
+                  status: "warning",
                   duration: 5000,
                   isClosable: true,
                 });

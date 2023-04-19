@@ -112,8 +112,8 @@ export default function ChallengeCreator({
     onSuccess: (data) => {
       toast({
         title: "Challenge creation request sent",
-        status: "success",
-        duration: 5000,
+        status: "info",
+        duration: 1000,
         isClosable: true,
       });
     },
@@ -140,7 +140,7 @@ export default function ChallengeCreator({
           title: "Challenge created successfully",
           description: `Challenge address: ${_challengeAddress}`,
           status: "success",
-          duration: 5000,
+          duration: 3000,
           isClosable: true,
         });
       }
@@ -155,8 +155,8 @@ export default function ChallengeCreator({
       toast({
         title: "Challenge creation transaction confirmed",
         description: `Transaction hash: ${data?.transactionHash}`,
-        status: "success",
-        duration: 2000,
+        status: "info",
+        duration: 1000,
         isClosable: true,
       });
     },

@@ -93,8 +93,8 @@ export default function ChallengeAcceptGrid({
     onSuccess: (data) => {
       toast({
         title: "Challenge accept request sent",
-        status: "success",
-        duration: 2000,
+        status: "info",
+        duration: 1000,
         isClosable: true,
       });
     },
@@ -109,8 +109,8 @@ export default function ChallengeAcceptGrid({
       toast({
         title: "Challenge accept transaction confirmed",
         description: `Transaction hash: ${data?.transactionHash}`,
-        status: "success",
-        duration: 2000,
+        status: "info",
+        duration: 1000,
         isClosable: true,
       });
     },
@@ -142,7 +142,7 @@ export default function ChallengeAcceptGrid({
             8
           )} ETH/USD with address ${currentUserAddress} was accepted.`,
           status: "success",
-          duration: 5000,
+          duration: 2000,
           isClosable: true,
         });
       }
