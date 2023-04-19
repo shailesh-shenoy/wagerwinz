@@ -22,5 +22,6 @@ export type ChallengeDetails = {
   settlementFeePercent?: number;
   settlementFeeMax?: BigNumber;
   currentBlockTimestamp?: BigNumber;
+  challengeStatus?: string;
   refetchChallengeDetails?: () => void;
 };

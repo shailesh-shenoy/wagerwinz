@@ -152,24 +152,20 @@ export default function ChallengeCreator({
     confirmations: 1,
     hash: challengeCreateData?.hash,
     onSuccess: (data) => {
-      if (data?.transactionHash) {
-        setChallengeDetails({
-          ...challengeDetails,
-          txHash: data?.transactionHash,
-        });
-      }
       toast({
         title: "Challenge creation transaction confirmed",
         description: `Transaction hash: ${data?.transactionHash}`,
         status: "success",
-        duration: 5000,
+        duration: 2000,
         isClosable: true,
       });
     },
     onError: (error: any) => {
       toast({
         title: "Error creating challenge",
-        description: error?.reason || error?.message,
+        description: `Transaction failed with error: ${
+          error?.reason || error?.message
+        }`,
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -292,13 +288,15 @@ export default function ChallengeCreator({
           <ButtonGroup gap={4}>
             <Tooltip
               hasArrow
-              label="Validate request parameters"
-              bg="green.600"
+              label="Validate the challenge parameters before sending a challenge creation transaction"
+              bg="gray.800"
               color="white"
             >
               <IconButton
                 aria-label="Validate challenge parameters"
-                colorScheme="green"
+                color="white"
+                bg="gray.800"
+                _hover={{ bg: "gray.600" }}
                 icon={<RepeatIcon />}
                 isLoading={isChallengeValidateLoading}
                 onClick={handleValidateChallenge}
@@ -307,12 +305,14 @@ export default function ChallengeCreator({
             <Tooltip
               hasArrow
               label={`Create challenge with ${entryFee} ETH entry fee and ${creatorPrediction} ETH/USD prediction`}
-              bg="green.600"
+              bg="gray.800"
               color="white"
             >
               <Button
                 type="submit"
-                colorScheme={isTxLoading ? "blue" : "primary"}
+                bg="gray.800"
+                _hover={{ bg: "gray.600" }}
+                color="white"
                 isDisabled={
                   !validChallenge || isChallengeCreationLoading || isTxLoading
                 }

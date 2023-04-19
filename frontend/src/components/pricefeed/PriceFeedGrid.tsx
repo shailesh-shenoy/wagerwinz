@@ -29,7 +29,7 @@ export default function PriceFeedGrid({
         >
           <IconButton
             ms={2}
-            colorScheme="green"
+            colorScheme="yellow"
             variant="solid"
             size="sm"
             onClick={ethPriceFeedDetails?.refetchEthFeed}

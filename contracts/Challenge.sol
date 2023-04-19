@@ -84,6 +84,57 @@ contract Challenge is Ownable {
         active = true;
     }
 
+    function getChallengeStatus() public view returns (string memory _status) {
+        /*
+        * Following are the rules governing the status of the challenge
+        * 1. If the challenge is not active, the challenge has been cancelled and is INACTIVE
+        * 2. If the challenge has been settled, thes status is SETTLED
+        * 3. If the challenge has not been accepted by the challenger:
+        *       a. The status is CHALLENGEABLE if the lock time has not passed 
+        *          as the challenger can still accept the challenge
+        *       b. The status is VOID if the lock time has passed 
+        *          as the challenger can no longer accept the challenge. 
+        *          This means only the creator has value locked in the challenge 
+        *          and can cancel the challenge to recover the entry fee.
+        * 4. If the challenge has been accepted by the challenger:
+        *      a. The status is ACCEPTED if the lock time has not passed.
+        *      b. The status is LOCKED if the lock time has passed but settlement period has not started
+        *      c. The status is SETTLEABLE if the settlement period has started
+        *      d. The status is EXPIRED if the settlement period has ended
+         */
+        if (!active) {
+            //! RULE 1
+            _status = "INACTIVE";
+        } else if (settled) {
+            //! RULE 2
+            _status = "SETTLED";
+        } else if (challenger == address(0x0)) {
+            //! RULE 3
+            if (block.timestamp <= lockTime) {
+                //! RULE 3.a
+                _status = "CHALLENGEABLE";
+            } else {
+                //! RULE 3.b
+                _status = "VOID";
+            }
+        } else {
+            //! RULE 4
+            if (block.timestamp <= lockTime) {
+                //! RULE 4.a
+                _status = "ACCEPTED";
+            } else if (block.timestamp <= settlementStartTime) {
+                //! RULE 4.b
+                _status = "LOCKED";
+            } else if (block.timestamp <= settlementEndTime) {
+                //! RULE 4.c
+                _status = "SETTLEABLE";
+            } else {
+                //! RULE 4.d
+                _status = "EXPIRED";
+            }
+        }
+    }
+
     function getChallengeDetails()
         external
         view
@@ -107,7 +158,8 @@ contract Challenge is Ownable {
             bool _challengerWithdrawn,
             uint8 _SETTLEMENT_FEE_PERCENT,
             uint64 _SETTLEMENT_FEE_MAX,
-            uint256 _currentTimestamp
+            uint256 _currentTimestamp,
+            string memory _challengeStatus
         )
     {
         _owner = owner();
@@ -130,6 +182,7 @@ contract Challenge is Ownable {
         _SETTLEMENT_FEE_PERCENT = SETTLEMENT_FEE_PERCENT;
         _SETTLEMENT_FEE_MAX = SETTLEMENT_FEE_MAX;
         _currentTimestamp = block.timestamp;
+        _challengeStatus = getChallengeStatus();
     }
 
     /*

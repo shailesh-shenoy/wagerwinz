@@ -56,11 +56,11 @@ export default function ContractInfo({
               >
                 <IconButton
                   ms={2}
-                  colorScheme="green"
+                  colorScheme="yellow"
                   variant="solid"
                   size="sm"
                   onClick={challengeFactoryDetails?.refetchChallengeFactory}
-                  aria-label="Refresh ETH/USD Price Data"
+                  aria-label="Refresh ChallengeFactory data"
                   icon={<RepeatIcon />}
                 />
               </Tooltip>

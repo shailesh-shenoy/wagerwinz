@@ -103,6 +103,7 @@ export default function CreateChallenge() {
         settlementFeePercent: data?._SETTLEMENT_FEE_PERCENT || 0,
         settlementFeeMax: data?._SETTLEMENT_FEE_MAX || 0,
         currentBlockTimestamp: data?._currentTimestamp || 0,
+        challengeStatus: data?._challengeStatus || "",
         refetchChallengeDetails: refetchChallengeDetails,
       });
     },

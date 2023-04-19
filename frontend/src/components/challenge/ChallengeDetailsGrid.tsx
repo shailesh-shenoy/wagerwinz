@@ -47,7 +47,7 @@ export default function ChallengeDetailsGrid({
         >
           <IconButton
             ms={2}
-            colorScheme="green"
+            colorScheme="yellow"
             variant="solid"
             size="sm"
             onClick={() => {
@@ -56,13 +56,7 @@ export default function ChallengeDetailsGrid({
                   ...challengeDetails,
                   challengeAddress: challengeInput,
                 });
-                toast({
-                  title: "Challenge Address Updated",
-                  description: "The challenge address has been updated.",
-                  status: "success",
-                  duration: 5000,
-                  isClosable: true,
-                });
+                challengeDetails?.refetchChallengeDetails?.();
               } else {
                 toast({
                   title: "Invalid Challenge Address",
@@ -71,6 +65,7 @@ export default function ChallengeDetailsGrid({
                   duration: 5000,
                   isClosable: true,
                 });
+                challengeDetails?.refetchChallengeDetails?.();
                 setChallengeInput(challengeDetails?.challengeAddress ?? "");
               }
             }}
@@ -90,12 +85,11 @@ export default function ChallengeDetailsGrid({
           color="white"
         >
           <Input
-            variant="filled"
+            variant="outline"
             type="text"
-            bg="secondary.100"
             value={challengeInput ?? "Loading..."}
             onChange={(event) => setChallengeInput(event.target.value.trim())}
-            size="sm"
+            size="md"
           />
         </Tooltip>
         <FormHelperText>
@@ -113,6 +107,24 @@ export default function ChallengeDetailsGrid({
           </Link>
         </FormHelperText>
       </FormControl>
+      <FormControl isReadOnly gridColumn={{ base: "span 2" }}>
+        <FormLabel>Challenge status</FormLabel>
+        <Tooltip
+          hasArrow
+          label={`Status of the challenge contract. The challenge can be in one of the following states: INACTIVE, SETTLED, CHALLENGEABLE, VOID, ACCEPTED, LOCKED, SETTLEABLE, or EXPIRED.`}
+          bg="green.600"
+          color="white"
+        >
+          <Input
+            type="text"
+            variant="filled"
+            value={challengeDetails?.challengeStatus ?? "Loading..."}
+            size="sm"
+            bg="secondary.100"
+          />
+        </Tooltip>
+      </FormControl>
+
       <FormControl isReadOnly gridColumn={{ base: "span 2", lg: "span 1" }}>
         <FormLabel>Current Block Timestamp</FormLabel>
         <Tooltip
@@ -387,7 +399,7 @@ export default function ChallengeDetailsGrid({
         </Tooltip>
       </FormControl>
       <FormControl isReadOnly gridColumn={{ base: "span 2", lg: "span 1" }}>
-        <FormLabel>Is challenge active</FormLabel>
+        <FormLabel>Is challenge active?</FormLabel>
         <Tooltip
           hasArrow
           label={`The challenge is active when initialized. It can be cancelled by the creator IF the challenge has not been locked yet. Once the challenge is locked, it needs to be settled or expire.`}
@@ -423,7 +435,7 @@ export default function ChallengeDetailsGrid({
         </Tooltip>
       </FormControl>
       <FormControl isReadOnly gridColumn={{ base: "span 2", lg: "span 1" }}>
-        <FormLabel>Has creator withdrawn</FormLabel>
+        <FormLabel>Has creator withdrawn?</FormLabel>
         <Tooltip
           hasArrow
           label={`If the challenge has not been settled before the settlement time, the creator can withdraw their wager only once and this field will be true.`}
@@ -443,7 +455,7 @@ export default function ChallengeDetailsGrid({
         </Tooltip>
       </FormControl>
       <FormControl isReadOnly gridColumn={{ base: "span 2", lg: "span 1" }}>
-        <FormLabel>Has challenger withdrawn</FormLabel>
+        <FormLabel>Has challenger withdrawn?</FormLabel>
         <Tooltip
           hasArrow
           label={`If the challenge has not been settled before the settlement time, the challenger can withdraw their wager only once and this field will be true.`}

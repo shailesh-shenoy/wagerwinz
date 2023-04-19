@@ -66,7 +66,7 @@ export default function ChallengeInteractor({
           </FormControl>
           <ChallengeAcceptGrid challengeDetails={challengeDetails} />
           <ChallengeSettleGrid challengeDetails={challengeDetails} />
-          <ChallengeWithdrawGrid />
+          <ChallengeWithdrawGrid challengeDetails={challengeDetails} />
         </Stack>
       </CardBody>
     </Card>
