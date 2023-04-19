@@ -15,7 +15,11 @@ import {
 } from "@chakra-ui/react";
 import { utils } from "ethers";
 import { ChallengeDetails } from "./types";
-import { calculateSettlementIncentive, formatDate } from "@/utilities/helpers";
+import {
+  calculateSettlementIncentive,
+  formatDate,
+  formatDateFromTimestampInSeconds,
+} from "@/utilities/helpers";
 import { useEffect, useState } from "react";
 
 export default function ChallengeDetailsGrid({
@@ -110,18 +114,25 @@ export default function ChallengeDetailsGrid({
         </FormHelperText>
       </FormControl>
       <FormControl isReadOnly gridColumn={{ base: "span 2", lg: "span 1" }}>
-        <FormLabel>Transaction Hash</FormLabel>
+        <FormLabel>Current Block Timestamp</FormLabel>
         <Tooltip
           hasArrow
-          label={`Hash of the Transaction which created the contract.
-                This can be used to verify the contract on Etherscan.`}
+          label={`The block.timestamp value is not 100% accurate and may not be exactly the same as local time. Current block timestamp in seconds is ${
+            challengeDetails?.currentBlockTimestamp?.toString() ?? "?"
+          }`}
           bg="green.600"
           color="white"
         >
           <Input
             type="text"
             variant="filled"
-            value={challengeDetails?.txHash ?? "Loading..."}
+            value={
+              challengeDetails?.currentBlockTimestamp
+                ? formatDateFromTimestampInSeconds(
+                    challengeDetails.currentBlockTimestamp.toNumber()
+                  )
+                : "Loading..."
+            }
             size="sm"
             bg="secondary.100"
           />

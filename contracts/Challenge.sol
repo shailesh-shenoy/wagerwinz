@@ -41,7 +41,7 @@ contract Challenge is Ownable {
 
     event ChallengeAccepted(address indexed _challengerAddress, uint256 _challengerPrediction);
 
-    event ChallengeCancelled(address indexed _cancelledBy);
+    event ChallengeCancelled(address indexed _cancelledBy, uint256 _cancelledAt);
 
     event ChallengeSettled(
         address indexed _settledBy,
@@ -106,7 +106,8 @@ contract Challenge is Ownable {
             bool _creatorWithdrawn,
             bool _challengerWithdrawn,
             uint8 _SETTLEMENT_FEE_PERCENT,
-            uint64 _SETTLEMENT_FEE_MAX
+            uint64 _SETTLEMENT_FEE_MAX,
+            uint256 _currentTimestamp
         )
     {
         _owner = owner();
@@ -128,6 +129,7 @@ contract Challenge is Ownable {
         _challengerWithdrawn = challengerWithdrawn;
         _SETTLEMENT_FEE_PERCENT = SETTLEMENT_FEE_PERCENT;
         _SETTLEMENT_FEE_MAX = SETTLEMENT_FEE_MAX;
+        _currentTimestamp = block.timestamp;
     }
 
     /*
@@ -177,7 +179,7 @@ contract Challenge is Ownable {
         //* Transfer the entry fee back to the creator
         payable(msg.sender).transfer(entryFee);
 
-        emit ChallengeCancelled(msg.sender);
+        emit ChallengeCancelled(msg.sender, block.timestamp);
     }
 
     /*

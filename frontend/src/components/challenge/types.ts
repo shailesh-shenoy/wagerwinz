@@ -2,7 +2,6 @@ import { BigNumber } from "ethers";
 
 export type ChallengeDetails = {
   challengeAddress?: string;
-  txHash?: string;
   owner?: string;
   startBlock?: BigNumber;
   startTime?: BigNumber;
@@ -22,5 +21,6 @@ export type ChallengeDetails = {
   challengerWithdrawn?: boolean;
   settlementFeePercent?: number;
   settlementFeeMax?: BigNumber;
+  currentBlockTimestamp?: BigNumber;
   refetchChallengeDetails?: () => void;
 };
