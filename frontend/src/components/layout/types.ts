@@ -1,3 +1,5 @@
+import { CHALLENGE_FACTORY_ADDRESS } from "@/artifacts/contracts/challengeFactoryAddress";
+
 interface NavItem {
   label: string;
   link: string;
@@ -25,11 +27,11 @@ export const ABOUT_ITEMS: Array<NavItem> = [
   },
   {
     label: "Github",
-    link: "#",
+    link: "https://github.com/shailesh-shenoy/wagerwinz",
   },
   {
     label: "Etherscan",
-    link: "#",
+    link: `https://sepolia.etherscan.io/address/${CHALLENGE_FACTORY_ADDRESS}`,
   },
 ];
 

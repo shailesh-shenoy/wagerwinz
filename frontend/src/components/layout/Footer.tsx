@@ -8,6 +8,7 @@ import {
   Text,
   Image,
   Flex,
+  Heading,
 } from "@chakra-ui/react";
 
 import NextLink from "next/link";
@@ -64,8 +65,8 @@ export default function Footer() {
 
 const ListHeader = ({ children }: { children: ReactNode }) => {
   return (
-    <Text fontWeight={"500"} fontSize={"lg"} mb={2}>
+    <Heading as="h4" fontWeight={"600"} fontSize={"xl"} mb={2}>
       {children}
-    </Text>
+    </Heading>
   );
 };
