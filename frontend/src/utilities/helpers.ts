@@ -19,7 +19,7 @@ export const calculateSettlementIncentive = (
   settlementFeeMax: BigNumber,
   entryFee: BigNumber
 ): string => {
-  const settlementFee = entryFee.mul(settlementFeePercent).div(100);
+  const settlementFee = entryFee.mul(settlementFeePercent * 2).div(100);
   return settlementFee.gt(settlementFeeMax)
     ? utils.formatEther(settlementFeeMax)
     : utils.formatEther(settlementFee);
