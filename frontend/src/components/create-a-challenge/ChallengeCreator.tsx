@@ -18,20 +18,18 @@ import {
   ButtonGroup,
   IconButton,
   Tooltip,
+  InputRightAddon,
+  InputGroup,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import challengeFactory from "@/artifacts/contracts/ChallengeFactory.sol/ChallengeFactory.json";
 import { useContractWrite, useWaitForTransaction, useAccount } from "wagmi";
 import { BigNumber, utils } from "ethers";
 import { RepeatIcon } from "@chakra-ui/icons";
 import { useChallengeFactoryChallengeCreatedEvent } from "../../generated";
-import {
-  useChallengeFactory,
-  useChallengeFactoryCreateChallenge,
-  usePrepareChallengeFactoryCreateChallenge,
-} from "@/generated";
-import { ChallengeFactoryDetails, ChallengeDetails } from "./types";
+import { usePrepareChallengeFactoryCreateChallenge } from "@/generated";
+import { ChallengeFactoryDetails } from "./types";
 import { formatDateFromTimestampInSeconds } from "@/utilities/helpers";
+import { ChallengeDetails } from "../challenge/types";
 
 export default function ChallengeCreator({
   challengeFactoryDetails,
@@ -138,13 +136,6 @@ export default function ChallengeCreator({
           ...challengeDetails,
           challengeAddress: _challengeAddress,
         });
-        console.log("Creator address: ", _creatorAddress);
-        console.log("Challenge address: ", _challengeAddress);
-        console.log("Lock time: ", _lockTime);
-        console.log("Entry fee: ", _entryFee);
-        console.log("Settlement start time: ", _settlementStartTime);
-        console.log("Settlement end time: ", _settlementEndTime);
-        console.log("Creator prediction: ", _creatorPrediction);
         toast({
           title: "Challenge created successfully",
           description: `Challenge address: ${_challengeAddress}`,
@@ -198,26 +189,32 @@ export default function ChallengeCreator({
         <Stack as="form" spacing={6} onSubmit={handleChallengeCreation}>
           <FormControl isRequired>
             <FormLabel>Your prediction</FormLabel>
-            <Input
-              variant="outline"
-              type="number"
-              value={creatorPrediction}
-              onChange={(event) => {
-                setCreatorPrediction(event.target.value);
-              }}
-            />
+            <InputGroup size="md" variant="outline">
+              <Input
+                variant="outline"
+                type="number"
+                value={creatorPrediction}
+                onChange={(event) => {
+                  setCreatorPrediction(event.target.value);
+                }}
+              />
+              <InputRightAddon bg="secondary.200">ETH/USD</InputRightAddon>
+            </InputGroup>
             <FormHelperText>Enter your prediction of ETH/USD</FormHelperText>
           </FormControl>
           <FormControl isRequired>
             <FormLabel>Your wager</FormLabel>
-            <Input
-              variant="outline"
-              type="number"
-              value={entryFee}
-              onChange={(event) => {
-                setEntryFee(event.target.value);
-              }}
-            />
+            <InputGroup size="md" variant="outline">
+              <Input
+                variant="outline"
+                type="number"
+                value={entryFee}
+                onChange={(event) => {
+                  setEntryFee(event.target.value);
+                }}
+              />
+              <InputRightAddon bg="secondary.200">ETH</InputRightAddon>
+            </InputGroup>
             <FormHelperText>
               {`Enter your wager in ETH. This price will be sent to the
                   challenge contract and locked when a challenger pays the same
@@ -331,7 +328,7 @@ export default function ChallengeCreator({
     </Card>
   );
 
-  async function handleChallengeCreation(event: any) {
+  function handleChallengeCreation(event: any) {
     event.preventDefault();
     createChallenge?.();
   }

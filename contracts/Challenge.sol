@@ -37,7 +37,7 @@ contract Challenge is Ownable {
     bool public active;
     address public winner;
 
-    event ChallengeAccepted(address indexed challengerAddress, uint256 challengerPrediction);
+    event ChallengeAccepted(address indexed _challengerAddress, uint256 _challengerPrediction);
 
     constructor(address _ethPriceFeedAddress) {
         ethPriceFeed = AggregatorV3Interface(_ethPriceFeedAddress);
