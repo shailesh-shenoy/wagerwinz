@@ -36,8 +36,22 @@ contract Challenge is Ownable {
     address public settledBy;
     bool public active;
     address public winner;
+    bool public creatorWithdrawn;
+    bool public challengerWithdrawn;
 
     event ChallengeAccepted(address indexed _challengerAddress, uint256 _challengerPrediction);
+
+    event ChallengeCancelled(address indexed _cancelledBy);
+
+    event ChallengeSettled(
+        address indexed _settledBy,
+        address indexed _winner,
+        uint256 _ethUsdPrice,
+        uint256 _settlementFee,
+        uint256 _settledAt
+    );
+
+    event AmountWithdrawn(address indexed _withdrawnBy, uint256 _amount);
 
     constructor(address _ethPriceFeedAddress) {
         ethPriceFeed = AggregatorV3Interface(_ethPriceFeedAddress);
@@ -89,6 +103,8 @@ contract Challenge is Ownable {
             address _settledBy,
             bool _active,
             address _winner,
+            bool _creatorWithdrawn,
+            bool _challengerWithdrawn,
             uint8 _SETTLEMENT_FEE_PERCENT,
             uint64 _SETTLEMENT_FEE_MAX
         )
@@ -108,6 +124,8 @@ contract Challenge is Ownable {
         _settledBy = settledBy;
         _active = active;
         _winner = winner;
+        _creatorWithdrawn = creatorWithdrawn;
+        _challengerWithdrawn = challengerWithdrawn;
         _SETTLEMENT_FEE_PERCENT = SETTLEMENT_FEE_PERCENT;
         _SETTLEMENT_FEE_MAX = SETTLEMENT_FEE_MAX;
     }
@@ -117,18 +135,22 @@ contract Challenge is Ownable {
     *The challenger must pay the entry fee to accept the challenge
     */
     function acceptChallenge(uint256 _challengerPrediction) external payable {
+        //* The challenge must be active
+        require(active, "Challenge: The challenge must be active");
+
         //* The challenge must not have been accepted already
-        require(challenger == address(0x0), "The challenge has already been accepted");
+        require(challenger == address(0x0), "Challenge: The challenge has already been accepted");
 
         //* The challenger must accept the challenge before the lock time
-        require(block.timestamp <= lockTime, "The challenger must accept the challenge before the lock time");
+        require(block.timestamp <= lockTime, "Challenge: The challenger must accept the challenge before the lock time");
 
         //! The entry fee must be paid to accept the challenge
-        require(msg.value == entryFee, "The entry fee must be paid to accept the challenge");
+        require(msg.value == entryFee, "Challenge: The entry fee must be paid to accept the challenge");
 
         //* The challenger cannot predict the same value as the creator as this would be a draw
         require(
-            _challengerPrediction != creatorPrediction, "The challenger cannot predict the same value as the creator"
+            _challengerPrediction != creatorPrediction,
+            "Challenge: The challenger cannot predict the same value as the creator"
         );
 
         //* Set the challenger and the challenger's prediction
@@ -136,5 +158,119 @@ contract Challenge is Ownable {
         challengerPrediction = _challengerPrediction;
 
         emit ChallengeAccepted(msg.sender, _challengerPrediction);
+    }
+
+    /*
+    * This function can be called by the creator
+    * Only if the challenge has not been accepted
+    */
+    function cancelChallenge() external {
+        //* The creator must be the caller
+        require(msg.sender == creator, "Challenge: Only the creator can cancel the challenge");
+
+        //* The challenge must not have been accepted already
+        require(challenger == address(0x0), "Challenge: The challenge has already been accepted");
+
+        //* Set the contract as inactive
+        active = false;
+
+        //* Transfer the entry fee back to the creator
+        payable(msg.sender).transfer(entryFee);
+
+        emit ChallengeCancelled(msg.sender);
+    }
+
+    /*
+    * This function is called by anyone to settle the challenge and gain a settlement fee
+    * The settler must call this function after the settlement start time and before the settlement end time
+    */
+    function settleChallenge() external {
+        //* The challenge must be active
+        require(active, "Challenge: The challenge must be active");
+
+        //* The challenge must not have been settled already
+        require(!settled, "Challenge: The challenge has already been settled");
+
+        //* The challenge must have been accepted already
+        require(challenger != address(0x0), "Challenge: The challenge has not been accepted");
+
+        //* The challenge must be settled between the settlement start and end times
+        require(
+            block.timestamp >= settlementStartTime && block.timestamp <= settlementEndTime,
+            "Challenge: The challenge must be settled between the settlement start and end times"
+        );
+
+        //* Settle the challenge
+        settled = true;
+        settledBy = msg.sender;
+
+        //* Get the latest ETH/USD price from the chainlink price feed
+        (, int256 _ethUsdPriceFromFeed,,,) = ethPriceFeed.latestRoundData();
+
+        //* Convert the ETH/USD price to a uint256
+        uint256 _ethUsdPrice = uint256(_ethUsdPriceFromFeed);
+
+        /* 
+        * Determine the winner by comparing the proximity 
+        * of the creator's prediction & challenger's prediction to the actual price
+        */
+        uint256 creatorProximity =
+            (creatorPrediction > _ethUsdPrice) ? creatorPrediction - _ethUsdPrice : _ethUsdPrice - creatorPrediction;
+        uint256 challengerProximity = (challengerPrediction > _ethUsdPrice)
+            ? challengerPrediction - _ethUsdPrice
+            : _ethUsdPrice - challengerPrediction;
+        winner = creatorProximity < challengerProximity ? creator : challenger;
+
+        //* Calculate the settlement fee
+        uint256 _calcSettlementFee = (address(this).balance * SETTLEMENT_FEE_PERCENT) / 100;
+        uint256 _settlementFee = (_calcSettlementFee > SETTLEMENT_FEE_MAX) ? SETTLEMENT_FEE_MAX : _calcSettlementFee;
+
+        //! Transfer the settlement fee to the settler, remaining balance can be withdrawn by the winner
+        payable(msg.sender).transfer(_settlementFee);
+
+        emit ChallengeSettled(msg.sender, winner, _ethUsdPrice, _settlementFee, block.timestamp);
+    }
+
+    /**
+     * This function can be called by the winner to withdraw the remaining balance
+     * IF the challenge was never settled, both the winner and challenger can withdraw their entry fee
+     */
+    function withdraw() external {
+        //* If the challenge has been settled, only the winner can withdraw the remaining balance
+        if (settled) {
+            //* Only the winner can withdraw
+            require(
+                msg.sender == winner,
+                "Challenge: Only the winner can withdraw the remaining balance as the challenge has been settled"
+            );
+            uint256 _remainingBalance = address(this).balance;
+            payable(msg.sender).transfer(_remainingBalance);
+            emit AmountWithdrawn(msg.sender, _remainingBalance);
+        } else {
+            //* As the challenge is not settled, the participants must wait until the settlement end time to withdraw
+            require(
+                block.timestamp > settlementEndTime,
+                "Challenge: The challenge has not been settled yet, please wait until the settlement end time"
+            );
+            /* 
+            * Since the challenge is not settled until the settlement time
+            * Both the winner and challenger can withdraw their entry fee only once
+            */
+            if (msg.sender == creator) {
+                //* The creator can only withdraw their entry fee once
+                require(!creatorWithdrawn, "Challenge: The creator has already withdrawn their entry fee");
+                creatorWithdrawn = true;
+                payable(msg.sender).transfer(entryFee);
+                emit AmountWithdrawn(msg.sender, entryFee);
+            } else if (msg.sender == challenger) {
+                //* The challenger can only withdraw their entry fee once
+                require(!challengerWithdrawn, "Challenge: The challenger has already withdrawn their entry fee");
+                challengerWithdrawn = true;
+                payable(msg.sender).transfer(entryFee);
+                emit AmountWithdrawn(msg.sender, entryFee);
+            } else {
+                revert("Challenge: Only the winner or challenger can withdraw their entry fee");
+            }
+        }
     }
 }

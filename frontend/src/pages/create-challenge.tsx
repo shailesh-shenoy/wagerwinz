@@ -98,6 +98,8 @@ export default function CreateChallenge() {
         settledBy: data?._settledBy || ethers.constants.AddressZero,
         active: data?._active || false,
         winner: data?._winner || ethers.constants.AddressZero,
+        creatorWithdrawn: data?._creatorWithdrawn || false,
+        challengerWithdrawn: data?._challengerWithdrawn || false,
         settlementFeePercent: data?._SETTLEMENT_FEE_PERCENT || 0,
         settlementFeeMax: data?._SETTLEMENT_FEE_MAX || 0,
         refetchChallengeDetails: refetchChallengeDetails,

@@ -349,7 +349,10 @@ export default function ChallengeDetailsGrid({
           <Input
             type="text"
             variant="filled"
-            value={challengeDetails?.settled?.toString() ?? "Loading..."}
+            value={
+              challengeDetails?.settled?.toString().toUpperCase() ??
+              "Loading..."
+            }
             size="sm"
             bg="secondary.100"
           />
@@ -383,7 +386,9 @@ export default function ChallengeDetailsGrid({
           <Input
             type="text"
             variant="filled"
-            value={challengeDetails?.active?.toString() ?? "Loading..."}
+            value={
+              challengeDetails?.active?.toString().toUpperCase() ?? "Loading..."
+            }
             size="sm"
             bg="secondary.100"
           />
@@ -401,6 +406,46 @@ export default function ChallengeDetailsGrid({
             type="text"
             variant="filled"
             value={challengeDetails?.winner ?? "Loading..."}
+            size="sm"
+            bg="secondary.100"
+          />
+        </Tooltip>
+      </FormControl>
+      <FormControl isReadOnly gridColumn={{ base: "span 2", lg: "span 1" }}>
+        <FormLabel>Has creator withdrawn</FormLabel>
+        <Tooltip
+          hasArrow
+          label={`If the challenge has not been settled before the settlement time, the creator can withdraw their wager only once and this field will be true.`}
+          bg="green.600"
+          color="white"
+        >
+          <Input
+            type="text"
+            variant="filled"
+            value={
+              challengeDetails?.creatorWithdrawn?.toString().toUpperCase() ??
+              "Loading..."
+            }
+            size="sm"
+            bg="secondary.100"
+          />
+        </Tooltip>
+      </FormControl>
+      <FormControl isReadOnly gridColumn={{ base: "span 2", lg: "span 1" }}>
+        <FormLabel>Has challenger withdrawn</FormLabel>
+        <Tooltip
+          hasArrow
+          label={`If the challenge has not been settled before the settlement time, the challenger can withdraw their wager only once and this field will be true.`}
+          bg="green.600"
+          color="white"
+        >
+          <Input
+            type="text"
+            variant="filled"
+            value={
+              challengeDetails?.challengerWithdrawn?.toString().toUpperCase() ??
+              "Loading..."
+            }
             size="sm"
             bg="secondary.100"
           />

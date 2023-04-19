@@ -110,7 +110,7 @@ export default function ChallengeAcceptGrid({
         title: "Challenge accept transaction confirmed",
         description: `Transaction hash: ${data?.transactionHash}`,
         status: "success",
-        duration: 5000,
+        duration: 2000,
         isClosable: true,
       });
     },
@@ -209,7 +209,7 @@ export default function ChallengeAcceptGrid({
         >
           <IconButton
             aria-label="Validate challenge parameters"
-            colorScheme="primary"
+            colorScheme="green"
             icon={<RepeatIcon />}
             isLoading={isAcceptValidateLoading}
             onClick={validateAcceptChallenge}

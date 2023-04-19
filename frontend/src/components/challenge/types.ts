@@ -18,6 +18,8 @@ export type ChallengeDetails = {
   settledBy?: string;
   active?: boolean;
   winner?: string;
+  creatorWithdrawn?: boolean;
+  challengerWithdrawn?: boolean;
   settlementFeePercent?: number;
   settlementFeeMax?: BigNumber;
   refetchChallengeDetails?: () => void;
