@@ -1,12 +1,13 @@
 
 # WagerWinz
 
-WagerWinz is a ETH based price prediction game where anyone can create a challenge and win SepoliaETH. 
+Live Link: https://wagerwinz.vercel.app/
 
+WagerWinz is an ETH based price prediction game where anyone can create a wager based on the price of ETH, challenge someone and win SepoliaETH. 
 
-Built using hardhat, nextjs, rainbowkit, and wagmi. Deployed to Sepolia Testnet and Vercel.
+Built using hardhat, nextjs, rainbowkit, and wagmi. Deployed to Sepolia Testnet and Vercel. 
 
-
+Queries the Chainlink ETH/USD price Oracle and utilized the ContractFactory/Proxy pattern for the smart contracts  to ensure total transparency & decentralization
 
 
 ## Authors
